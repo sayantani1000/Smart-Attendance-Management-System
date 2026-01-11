@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SAM System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
+        .container {
+            width: 400px;
+            margin: 80px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+        button {
+            padding: 8px 15px;
+            margin: 6px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="container" id="loginBox">
+    <h2>Smart Attendance System</h2>
+
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+    <p id="loginMsg"></p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="container hidden" id="mainBox">
+    <h2>Attendance Dashboard</h2>
+
+    <!-- Add Student -->
+    <input type="text" id="studentName" placeholder="Enter student name">
+    <button onclick="addStudent()">Add Student</button>
+
+    <!-- Attendance Table -->
+    <table id="studentTable">
+        <tr>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Present</th>
+        </tr>
+    </table>
+
+    <button onclick="markAttendance()">Submit Attendance</button>
+    <button onclick="showReport()">View Report</button>
+
+    <div id="report"></div>
+</div>
+
+<script>
+    let studentCount = 0;
+
+    function login() {
+        let user = document.getElementById("username").value;
+        let pass = document.getElementById("password").value;
+        let msg = document.getElementById("loginMsg");
+
+        if (user === "admin" && pass === "admin123") {
+            document.getElementById("loginBox").classList.add("hidden");
+            document.getElementById("mainBox").classList.remove("hidden");
+        } else {
+            msg.style.color = "red";
+            msg.innerText = "Invalid username or password";
+        }
+    }
+
+    function addStudent() {
+        let name = document.getElementById("studentName").value;
+        if (name === "") {
+            alert("Please enter student name");
+            return;
+        }
+
+        studentCount++;
+
+        let table = document.getElementById("studentTable");
+        let row = table.insertRow();
+
+        row.innerHTML = `
+            <td>${studentCount}</td>
+            <td>
+                <input type="text" value="${name}">
+            </td>
+            <td>
+                <input type="checkbox">
+            </td>
+        `;
+
+        document.getElementById("studentName").value = "";
+    }
+
+    function markAttendance() {
+        alert("Attendance Submitted Successfully!");
+    }
+
+    function showReport() {
+        let table = document.getElementById("studentTable");
+        let report = "<h3>Attendance Report</h3>";
+
+        for (let i = 1; i < table.rows.length; i++) {
+            let name = table.rows[i].cells[1].children[0].value;
+            let present = table.rows[i].cells[2].children[0].checked;
+            report += `<p>${name} : ${present ? "Present" : "Absent"}</p>`;
+        }
+
+        document.getElementById("report").innerHTML = report;
+    }
+</script>
+
+</body>
+</html>
